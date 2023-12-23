@@ -1,5 +1,11 @@
+html {
+  font-family: "Gill Sans", sans-serif;
+}
+
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -26,6 +32,87 @@
 
 .App-link {
   color: #61dafb;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  width: 70vw;
+  min-height: 80vh;
+  margin-left: 20vw;
+  margin-top: 60px;
+  color: #333;
+  background-color: #f0f0f0; 
+  border-radius: 15px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  overflow-y: auto;  
+  flex: 1 0 auto;
+}
+
+.content img {
+  max-width: 500px; /* Убедитесь, что изображение не выходит за пределы блока */
+  height: auto; /* Сохраните пропорции изображения */
+  display: block; /* Уберите пробелы вокруг изображения */
+  margin: 0 auto; /* Выровняйте изображение по центру */
+  border-radius: 10px; /* Добавьте скругленные углы */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); /* Добавьте тень для глубины */
+}
+
+
+.content h1 {
+  color: #444;
+  font-size: 2em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.content h2 {
+  color: #666;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+.content ul, .content ol {
+  padding-left: 20px;
+}
+
+.content li {
+  line-height: 1.6;
+}
+
+.content ol {
+  list-style-type: decimal;
+}
+
+.content form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.content form label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.content form input[type="submit"] {
+  width: fit-content;
+  padding: 10px 20px;
+  background-color: #b65e0d;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.content form input[type="submit"]:hover {
+  background-color: #ff7b00;
 }
 
 @keyframes App-logo-spin {
