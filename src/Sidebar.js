@@ -24,6 +24,14 @@ function Sidebar() {
         <i className="fa fa-laptop" aria-hidden="true"></i>
         Рецепт: Салат Нисуаз
     </Link>
+    <Link to="/page5">
+        <i className="fa fa-laptop" aria-hidden="true"></i>
+        Рецепт: Паста Болоньезе
+    </Link>
+    <Link to="/page6">
+        <i className="fa fa-laptop" aria-hidden="true"></i>
+        Рецепт: Лазанья
+    </Link>
     <Link to="/registration">
         <i className="fa fa-laptop" aria-hidden="true"></i>
         Регистрация

@@ -5,7 +5,6 @@ class Page4 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // ваше начальное состояние
     };
   }
 

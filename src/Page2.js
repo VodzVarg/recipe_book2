@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import image from './img/chicken.jpg'; // Путь к вашему изображению
+import image from './img/chicken.jpg';
 
 function Page2() {
   const [recipes, setRecipes] = useState([

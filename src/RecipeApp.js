@@ -12,7 +12,6 @@ function withFavorite(Component) {
     render() {
       const { favorite } = this.state;
 
-      // Клонируем элемент и добавляем новые свойства
       return (
         <Component
           {...this.props}
@@ -40,7 +39,6 @@ class Recipe extends React.Component {
   }
 }
 
-// Используем HOC с компонентом Recipe
 const RecipeWithFavorite = withFavorite(Recipe);
 
 class RecipeApp extends React.Component {

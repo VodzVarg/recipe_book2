@@ -30,14 +30,12 @@ class Registration extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // Выводим сообщение при достижении определенного количества секунд
     if (this.state.seconds === 10) {
       console.log('Прошло 10 секунд');
     }
   }
 
   componentWillUnmount() {
-    // Очищаем таймер перед удалением компонента
     clearInterval(this.timerID);
   }
 
