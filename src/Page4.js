@@ -2,13 +2,32 @@ import React from 'react';
 import image from './img/S.jpeg';
 
 class Page4 extends React.Component {
-    handleClick() {
-      alert("салат нисуаз");
-    }
-  
+  constructor(props) {
+    super(props);
+    this.state = {
+      // ваше начальное состояние
+    };
+  }
+
+  componentDidMount() {
+    console.log("Компонент Page4 был успешно отрендерен");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("Компонент Page4 был обновлен");
+  }
+
+  componentWillUnmount() {
+    console.log("Компонент Page4 будет размонтирован");
+  }
+
+  handleClick() {
+    alert("салат нисуаз");
+  }
+
   render() {
     return (
-        <div className="content">
+      <div className="content">
         <h1 onClick={this.handleClick.bind(this)}>Рецепт: Салат Нисуаз</h1>
         <img src={image} alt="Салат Нисуаз" />
         <h2>Ингредиенты:</h2>

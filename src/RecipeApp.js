@@ -1,10 +1,54 @@
 import React from 'react';
 
+// HOC, который добавляет функциональность "избранное"
+function withFavorite(Component) {
+  return class extends React.Component {
+    state = { favorite: false };
+
+    toggleFavorite = () => {
+      this.setState(prevState => ({ favorite: !prevState.favorite }));
+    };
+
+    render() {
+      const { favorite } = this.state;
+
+      // Клонируем элемент и добавляем новые свойства
+      return (
+        <Component
+          {...this.props}
+          favorite={favorite}
+          toggleFavorite={this.toggleFavorite}
+        />
+      );
+    }
+  };
+}
+
+class Recipe extends React.Component {
+  render() {
+    const { recipe, favorite, toggleFavorite, handleDelete } = this.props;
+
+    return (
+      <div>
+        <h2>{recipe.title}</h2>
+        <p>{recipe.ingredients}</p>
+        <p>{recipe.instructions}</p>
+        <button onClick={toggleFavorite}>{favorite ? 'Удалить из избранного' : 'Добавить в избранное'}</button>
+        <button onClick={handleDelete}>Удалить рецепт</button>
+      </div>
+    );
+  }
+}
+
+// Используем HOC с компонентом Recipe
+const RecipeWithFavorite = withFavorite(Recipe);
+
 class RecipeApp extends React.Component {
   constructor(props) {
     super(props);
+    const savedRecipes = localStorage.getItem('recipes');
     this.state = {
-      recipes: [],
+      recipes: savedRecipes ? JSON.parse(savedRecipes) : [],
       title: '',
       ingredients: '',
       instructions: ''
@@ -17,16 +61,29 @@ class RecipeApp extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.setState(state => ({
-      recipes: [...state.recipes, {
+    this.setState(state => {
+      const recipes = [...state.recipes, {
         title: state.title,
         ingredients: state.ingredients,
         instructions: state.instructions
-      }],
-      title: '',
-      ingredients: '',
-      instructions: ''
-    }));
+      }];
+      localStorage.setItem('recipes', JSON.stringify(recipes));
+      return {
+        recipes,
+        title: '',
+        ingredients: '',
+        instructions: ''
+      };
+    });
+  }
+
+  handleDelete = (index) => {
+    this.setState(state => {
+      const recipes = [...state.recipes];
+      recipes.splice(index, 1);
+      localStorage.setItem('recipes', JSON.stringify(recipes));
+      return { recipes };
+    });
   }
 
   render() {
@@ -51,9 +108,10 @@ class RecipeApp extends React.Component {
         <div>
           {this.state.recipes.map((recipe, index) => (
             <div key={index}>
-              <h2>{recipe.title}</h2>
-              <p>{recipe.ingredients}</p>
-              <p>{recipe.instructions}</p>
+              <RecipeWithFavorite
+                recipe={recipe}
+                handleDelete={() => this.handleDelete(index)}
+              />
             </div>
           ))}
         </div>

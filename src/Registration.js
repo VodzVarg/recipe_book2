@@ -1,6 +1,9 @@
 import React from 'react';
 import MyButton from './MyButton';
 
+
+
+
 class Registration extends React.Component {
   handleClick = () => {
     alert("Вы кликнули на кнопку!");
@@ -10,10 +13,42 @@ class Registration extends React.Component {
     alert(`Вы нажали клавишу: ${event.key}`);
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      seconds: 0
+    };
+  }
+
+  componentDidMount() {
+    // Запускаем таймер после монтирования компонента
+    this.timerID = setInterval(() => {
+      this.setState(prevState => ({
+        seconds: prevState.seconds + 1
+      }));
+    }, 1000);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Выводим сообщение при достижении определенного количества секунд
+    if (this.state.seconds === 10) {
+      console.log('Прошло 10 секунд');
+    }
+  }
+
+  componentWillUnmount() {
+    // Очищаем таймер перед удалением компонента
+    clearInterval(this.timerID);
+  }
+
   render() {
     return (
+        
       <div className="content">
         <h1>Регистрация</h1>
+        <div>
+        Прошло {this.state.seconds} секунд.
+      </div>
         <form>
           <label>
             Имя:
