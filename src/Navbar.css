@@ -3,145 +3,132 @@
   }
   
   body {
-    background: #f77e0c;
+    background: linear-gradient(white, orange);
     color: #222;
     line-height: normal;
     font-size: 16px;
     font-family: sans-serif;
   }
 
-  a {
-    color: #f77e0c;
-    text-decoration: none;
-    font-weight: 600;
-  }
-  
-    a:hover {
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 600;
+  .header-container {
+    background-color: #f9f9f9;
 }
-  
-  nav {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 50px;
-    background: #fff;
-    box-shadow: 0 0px 9px 4px rgba(0, 0, 0, .1), 0 -5px 2px 2px rgba(0, 0, 0, .1);
-    z-index: 1000;
-    min-width: 580px;
-  }
-  
-  nav .logo {
-    position: relative;
-    float: left;
-    height: 50px;
-    line-height: 50px;
-    padding: 0 15px;
-    font-size: 22px;
-    font-weight: 900;
-    text-transform: uppercase;
-  }
-  
-  nav .logo span {
-    display: inline-block;
-    position: relative;
-    top: -8px;
-    font-size: 13pt;
-  }
-  
-  nav .logo:hover {
-    background: #f77e0c;
-  }
-  
-  nav .links {
-    float: right;
-    margin-right: 30px;
-    position: relative;
-  }
-  
-  nav .links li {
-    float: left;
-    list-style: none;
-    position: relative;
-    display: inline-block;
-  }
-  
-  nav .links li > a {
-    position: relative;
-    display: inline-block;
-    padding: 0 10px;
-    line-height: 30px;
-    height: 30px;
-  }
-  
-  nav .links li > a:hover {
-    color: #fff;
-    background: #f77e0c;
-    border-radius: 2px;
-  }
-  
-  nav .links li > a[class^="trigger-"] {
-    padding-right: 40px;
-  }
-  
-  nav .links li > a .arrow {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    top: 35%;
-    text-align: center;
-    right: 10px;
-    border-width: 5px 5px 0 5px;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, .3) transparent;
-  }
-  
-  nav .links li > a .arrow:after {
-    content: "";
-    border-left: 1px solid rgba(0, 0, 0, .15);
-    top: -10px;
-    left: -15px;
-    position: absolute;
-    height: 15px;
-  }
-  
-  nav .links li ul {
-    position: absolute;
-    left: 0;
-    margin: 0;
-    background: #fff;
-    border-radius: 2px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, .15);
-    display: none;
-  }
-  
-  nav .links li ul > li {
-    clear: both;
-    list-style: none;
-    display: block;
-    padding: 0 10px;
-    margin: 0;
-    width: 100%;
-  }
-  
-  nav .links li ul > li:hover {
-    background: #f77e0c;
-  }
-  
-  nav .links li ul > li:hover > a {
-    background: #f77e0c;
-    color: #fff;
-  }
-  
-  nav .links li:hover > .drop {
-    display: block;
-    animation: fadeInRight .3s ease;
-    -webkit-animation: fadeInRight .3s ease;
-  }
-  
+
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-heart {
+    color: orange;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.header-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.header-search {
+    display: flex;
+    align-items: center;
+}
+
+.header-search-input {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.header-search-icon {
+    color: #007f00;
+    font-size: 20px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f8f8f8;
+}
+
+.header-container {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-heart {
+  color: orange;
+  margin-right: 10px;
+}
+
+.header-title {
+  color: orange;
+  font-size: 24px;
+  width: 150px;
+}
+
+.header-search {
+  display: flex;
+  align-items: center;
+}
+
+.header-search-input {
+  margin-right: 10px;
+}
+
+.header-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: grey;
+  width: 100%;
+}
+
+.button{
+  background-color: grey;
+  color: white;
+  margin-left: 10px;
+  font-size: 13px;
+  padding: 3px 8px;
+  border: solid black 2px;
+  text-decoration: none;
+}
+
+.span{
+  color: grey;
+  text-decoration: none;
+}
+
+.header-button-add {
+  background-color: green;
+  color: white;
+  margin-left: 10px;
+}
+
+.header-button-login {
+  background-color: grey;
+  color: white;
+  margin-left: 10px;
+}
   @keyframes fadeInRight {
     0% {
       opacity: 0;

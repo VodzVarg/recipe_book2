@@ -103,16 +103,6 @@ class RecipeApp extends React.Component {
           </label>
           <input type="submit" value="Добавить рецепт" />
         </form>
-        <div>
-          {this.state.recipes.map((recipe, index) => (
-            <div key={index}>
-              <RecipeWithFavorite
-                recipe={recipe}
-                handleDelete={() => this.handleDelete(index)}
-              />
-            </div>
-          ))}
-        </div>
       </div>
     );
   }

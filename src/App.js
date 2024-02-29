@@ -12,6 +12,7 @@ import './App.css';
 import Footer from './Footer';
 import Registration from './Registration';
 import RecipeApp from './RecipeApp';
+import RecipePage from './Recipepage';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/page6" element={<Page6 />} />
           <Route path="/registration" element={<Registration/>} />
           <Route path="/recipeapp" element={<RecipeApp />} />
+          <Route path="/recipe/:id" element={<RecipePage />} />
         </Routes>
       <Footer/>
       </div>

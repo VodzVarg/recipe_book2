@@ -1,28 +1,38 @@
 import React from 'react';
 import './Navbar.css';
+import { Link } from 'react-router-dom';  
 
 function Navbar() {
   return (
-    <nav id="navigation">
-        <a href="#" class="logo">Recipe book</a>
-        <ul class="links">
-    <li><a href="#">О книге рецептов</a></li>
-    <li class="dropdown"><a href="#" class="trigger-drop">Рецепты<i class="arrow"></i></a>
-      <ul class="drop">
-        <li><a href="#">Завтрак</a></li>
-        <li><a href="#">Обед</a></li>
-        <li><a href="#">Ужин</a></li>
-        <li><a href="#">Десерты</a></li>
-      </ul>
-    </li>
-    <li class="dropdown"><a href="#" class="trigger-drop">Контакты<i class="arrow"></i></a>
-      <ul class="drop">
-        <li><a href="#">Email</a></li>
-        <li><a href="#">Телефон</a></li>
-      </ul>
-    </li>
-  </ul>
-        </nav>
+    <nav className="top">
+      <div class="header-container">
+    <div class="header-content">
+        <div class="header-left">
+            <span class="header-heart">♡</span>
+            <span class="header-title">1000 МЕНЮ</span>
+        </div>
+        <div class="header-search">
+            <input type="text" placeholder="Поиск" class="header-search-input" />
+            <span class="header-search-icon">🔍</span>
+        </div>
+        <div class="header-menu">
+        <Link to="/recipeapp" className="span">
+          <i className="fa fa-laptop" aria-hidden="true"></i>
+        Добавить рецепт
+      </Link>
+            <span>Каналы</span>
+            <span>Работа</span>
+            <span>Конкурсы</span>
+            <button class="header-button-add">+ Добавить...</button>
+            <Link to="/registration" className="button">
+        <i className="fa fa-laptop" aria-hidden="true"></i>
+        Войти
+      </Link>
+        </div>
+    </div>
+</div>
+
+    </nav>
   );
 }
 
