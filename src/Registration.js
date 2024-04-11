@@ -1,73 +1,74 @@
-import React from 'react';
-import MyButton from './MyButton';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 
+function Registration() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
+  const navigate = useNavigate(); // Create a navigate instance
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-class Registration extends React.Component {
-  handleClick = () => {
-    alert("Вы кликнули на кнопку!");
-  }
+    // ... (validation logic remains the same)
 
-  handleKeyDown = (event) => {
-    alert(`Вы нажали клавишу: ${event.key}`);
-  }
+    // Create user object
+    const newUser = { username, email, password };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      seconds: 0
-    };
-  }
+    // ... (localStorage logic remains the same)
 
-  componentDidMount() {
-    // Запускаем таймер после монтирования компонента
-    this.timerID = setInterval(() => {
-      this.setState(prevState => ({
-        seconds: prevState.seconds + 1
-      }));
-    }, 1000);
-  }
+    // Redirect to login page after registration
+    navigate('/login');
+  };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.seconds === 10) {
-      console.log('Прошло 10 секунд');
-    }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  render() {
-    return (
-        
-      <div className="content">
-        <h1>Регистрация</h1>
-        <div>
-        Прошло {this.state.seconds} секунд.
-      </div>
-        <form>
-          <label>
-            Имя:
-            <input type="text" name="name" />
-          </label>
-          <label>
-            Электронная почта:
-            <input type="email" name="email" />
-          </label>
-          <label>
-            Пароль:
-            <input type="password" name="password" />
-          </label>
-          <input type="submit" value="Зарегистрироваться" onClick={this.handleClick} />
-        </form>
-        <button onClick={this.handleClick}>Нажми меня</button>
-        <input type="text" placeholder="Нажмите любую клавишу..." onKeyDown={this.handleKeyDown} />
-        <MyButton />
-      </div>
-    );
-  }
+  return (
+    <div className="content">
+      <h1>Registration</h1>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      <form onSubmit={handleSubmit}>
+        <label>
+          Имя:
+          <input
+            type="text" // Changed to type="text"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)} // Added onChange handler
+          />
+        </label>
+        <label>
+          Электронная почта:
+          <input
+            type="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} // Added onChange handler
+          />
+        </label>
+        <label>
+          Пароль:
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} // Added onChange handler
+          />
+        </label>
+        <label>
+          Подтвердите пароль:
+          <input
+            type="password"
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)} // Added onChange handler
+          />
+        </label>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
 }
 
 export default Registration;

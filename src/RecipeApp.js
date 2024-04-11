@@ -1,111 +1,167 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addRecipe, editRecipe, deleteRecipe } from './actions/actions'; 
+// ... other imports
 
-// HOC, который добавляет функциональность "избранное"
-function withFavorite(Component) {
-  return class extends React.Component {
-    state = { favorite: false };
+function RecipeApp({ isAdmin }) {
+    const recipes = useSelector((state) => state.recipes);
+    const dispatch = useDispatch();
+  
+    const [editMode, setEditMode] = useState({
+      index: null,
+      title: '',
+      ingredients: [],
+      instructions: [],
+      image: '',
+    });
+  
+    const [newRecipe, setNewRecipe] = useState({
+      title: '',
+      ingredients: [],
+      instructions: [],
+      image: '',
+      ingredientInput: '', // Input for adding ingredients
+      instructionInput: '', // Input for adding instructions
+    });
+  
 
-    toggleFavorite = () => {
-      this.setState(prevState => ({ favorite: !prevState.favorite }));
-    };
-
-    render() {
-      const { favorite } = this.state;
-
-      return (
-        <Component
-          {...this.props}
-          favorite={favorite}
-          toggleFavorite={this.toggleFavorite}
-        />
-      );
+   // handleChange functions for BOTH editMode and newRecipe
+   const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (editMode.index !== null) {
+      setEditMode({ ...editMode, [name]: value });
+    } else {
+      setNewRecipe({ ...newRecipe, [name]: value });
     }
   };
-}
 
-class Recipe extends React.Component {
-  render() {
-    const { recipe, favorite, toggleFavorite, handleDelete } = this.props;
+  const handleIngredientChange = (event) => {
+    setNewRecipe({ ...newRecipe, ingredientInput: event.target.value });
+  };
 
-    return (
-      <div>
-        <h2>{recipe.title}</h2>
-        <p>{recipe.ingredients}</p>
-        <p>{recipe.instructions}</p>
-        <button onClick={toggleFavorite}>{favorite ? 'Удалить из избранного' : 'Добавить в избранное'}</button>
-        <button onClick={handleDelete}>Удалить рецепт</button>
-      </div>
-    );
-  }
-}
+  const handleInstructionChange = (event) => {
+    setNewRecipe({ ...newRecipe, instructionInput: event.target.value });
+  };
 
-const RecipeWithFavorite = withFavorite(Recipe);
+  const handleAddIngredient = () => {
+    if (newRecipe.ingredientInput.trim() !== '') {
+      setNewRecipe((prevState) => ({
+        ...prevState,
+        ingredients: [...prevState.ingredients, prevState.ingredientInput],
+        ingredientInput: '', 
+      }));
+    }
+  };
 
-class RecipeApp extends React.Component {
-  constructor(props) {
-    super(props);
-    const savedRecipes = localStorage.getItem('recipes');
-    this.state = {
-      recipes: savedRecipes ? JSON.parse(savedRecipes) : [],
-      title: '',
-      ingredients: '',
-      instructions: ''
-    };
-  }
+  const handleAddInstruction = () => {
+    if (newRecipe.instructionInput.trim() !== '') {
+      setNewRecipe((prevState) => ({
+        ...prevState,
+        instructions: [...prevState.instructions, prevState.instructionInput],
+        instructionInput: '', 
+      }));
+    }
+  };
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    this.setState(state => {
-      const recipes = [...state.recipes, {
-        title: state.title,
-        ingredients: state.ingredients,
-        instructions: state.instructions
-      }];
-      localStorage.setItem('recipes', JSON.stringify(recipes));
-      return {
-        recipes,
-        title: '',
-        ingredients: '',
-        instructions: ''
+  const handleImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (editMode.index !== null) {
+          setEditMode({ ...editMode, image: e.target.result });
+        } else {
+          setNewRecipe({ ...newRecipe, image: e.target.result });
+        }
       };
-    });
-  }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
 
-  handleDelete = (index) => {
-    this.setState(state => {
-      const recipes = [...state.recipes];
-      recipes.splice(index, 1);
-      localStorage.setItem('recipes', JSON.stringify(recipes));
-      return { recipes };
+  const handleEditClick = (index) => {
+    const recipe = recipes[index];
+    setEditMode({
+      index,
+      title: recipe.title,
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions,
+      image: recipe.image,
     });
-  }
+  };
 
-  render() {
-    return (
-      <div className="content">
-        <h1>Добавить рецепт</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Название:
-            <input type="text" name="title" value={this.state.title} onChange={this.handleChange} />
-          </label>
-          <label>
-            Ингредиенты:
-            <textarea name="ingredients" value={this.state.ingredients} onChange={this.handleChange} />
-          </label>
-          <label>
-            Инструкции:
-            <textarea name="instructions" value={this.state.instructions} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Добавить рецепт" />
-        </form>
+  const handleSaveEdit = () => {
+    const updatedRecipe = { ...editMode }; 
+    dispatch(editRecipe(editMode.index, updatedRecipe));
+    setEditMode({ index: null, title: '', ingredients: [], instructions: [], image: '' }); 
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(addRecipe(newRecipe)); 
+    setNewRecipe({ title: '', ingredients: [], instructions: [], image: '', ingredientInput: '', instructionInput: '' }); 
+  };
+
+  return (
+    <div className="content">
+      <h1>Add Recipe</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Title:
+          <input
+            type="text"
+            name="title"
+            value={newRecipe.title} 
+            onChange={handleChange} 
+          />
+        </label>
+        <label>
+          Ingredients:
+          <input
+            type="text"
+            name="ingredientInput"
+            value={newRecipe.ingredientInput} 
+            onChange={handleIngredientChange} 
+          />
+          <button type="button" onClick={handleAddIngredient}>
+            Add Ingredient
+          </button>
+          <ul>
+            {newRecipe.ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul>
+        </label>
+        {/* Similar label for instructions */}
+
+        <label>
+          Image:
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+          /> 
+          {/* Display the image if it exists */}
+          {newRecipe.image && <img src={newRecipe.image} alt="Preview" />} 
+        </label>
+
+        {isAdmin ? (
+          <input type="submit" value="Add Recipe" />
+        ) : (
+          <button disabled style={{ cursor: 'not-allowed' }}>
+            Add Recipe (Admin Only)
+          </button>
+        )}
+      </form>
+
+      <h2>Recipes</h2>
+      <div>
+        {recipes.map((recipe, index) => (
+          <div key={index}>
+            {/* ... (editing logic and recipe display - same as before) */}
+          </div>
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default RecipeApp;

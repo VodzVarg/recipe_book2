@@ -2,14 +2,12 @@ import React from 'react';
 import image from './img/R.jpeg';
 
 class Page3 extends React.Component {
-    handleClick() {
-      alert("карбонара");
-    }
+  
   
   render() {
     return (
         <div className="content">
-        <h1 onClick={this.handleClick.bind(this)}>Рецепт: Паста Карбонара</h1>
+        <h1>Рецепт: Паста Карбонара</h1>
         <img src={image} alt="Паста Карбонара" />
         <h2>Ингредиенты:</h2>
         <ul>

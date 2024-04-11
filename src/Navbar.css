@@ -7,7 +7,7 @@
     color: #222;
     line-height: normal;
     font-size: 16px;
-    font-family: sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
   .header-container {
@@ -58,6 +58,7 @@
   justify-content: space-between;
   padding: 20px;
   background-color: #f8f8f8;
+  border-bottom: solid darkorange;
 }
 
 .header-container {
@@ -80,6 +81,43 @@
   margin-right: 10px;
 }
 
+label {
+  max-width: 300px;
+}
+
+label > input {
+  width: fit-content;
+  padding: 10px 20px;
+  border: solid 1px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button {
+  width: fit-content;
+  padding: 10px 20px;
+  background-color: #ff7b00;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #b65e0d;
+}
+
+button:disabled {
+  width: fit-content;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: not-allowed;
+  background-color: lightgray;
+  color: gray;
+}
+
 .header-title {
   color: orange;
   font-size: 24px;
@@ -97,7 +135,7 @@
 
 .header-menu {
   display: flex;
-  justify-content: space-around;
+  justify-content: end;
   align-items: center;
   color: grey;
   width: 100%;
@@ -122,6 +160,43 @@
   background-color: green;
   color: white;
   margin-left: 10px;
+}
+
+.blockbox{
+  display: flex;
+}
+
+.block{
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  position: relative;
+  height: auto;
+  max-width: auto;
+  overflow-y: hidden;
+  overflow-x:auto;
+}
+
+.block > img{
+  float: left;
+  width:  250px;
+  height: 250px;
+  object-fit: cover;
+}
+
+.block > a > h2{
+  font-size: 22px;
+font-family: "Open Sans", sans-serif;
+font-weight: 700;
+height: 80px;
+line-height: 40px;
+color: black;
+text-decoration: none;
+}
+
+.block > a{
+color: black;
+text-decoration: none;
 }
 
 .header-button-login {
