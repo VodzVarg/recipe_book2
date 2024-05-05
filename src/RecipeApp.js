@@ -1,46 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRecipe, editRecipe, deleteRecipe } from './actions/actions'; 
-// ... other imports
+import { addRecipe } from './actions/actions'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function RecipeApp({ isAdmin }) {
-    const recipes = useSelector((state) => state.recipes);
-    const dispatch = useDispatch();
+function RecipeApp() {
+  const [recipes, setRecipes] = useState([]);
+  const dispatch = useDispatch();
   
-    const [editMode, setEditMode] = useState({
-      index: null,
-      title: '',
-      ingredients: [],
-      instructions: [],
-      image: '',
-    });
-  
-    const [newRecipe, setNewRecipe] = useState({
-      title: '',
-      ingredients: [],
-      instructions: [],
-      image: '',
-      ingredientInput: '', // Input for adding ingredients
-      instructionInput: '', // Input for adding instructions
-    });
-  
+  useEffect(() => {
+    // Загрузка рецептов при монтировании компонента
+    loadRecipes().then(setRecipes);
+  }, []);
 
-   // handleChange functions for BOTH editMode and newRecipe
-   const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (editMode.index !== null) {
-      setEditMode({ ...editMode, [name]: value });
-    } else {
-      setNewRecipe({ ...newRecipe, [name]: value });
+  const loadRecipes = async () => {
+    try {
+      const recipesJSON = await AsyncStorage.getItem('recipes');
+      return recipesJSON != null ? JSON.parse(recipesJSON) : [];
+    } catch (error) {
+      console.error('Error loading recipes from AsyncStorage:', error);
+      return [];
     }
   };
 
-  const handleIngredientChange = (event) => {
-    setNewRecipe({ ...newRecipe, ingredientInput: event.target.value });
+  const saveRecipes = async (recipes) => {
+    try {
+      const recipesJSON = JSON.stringify(recipes);
+      await AsyncStorage.setItem('recipes', recipesJSON);
+    } catch (error) {
+      console.error('Error saving recipes to AsyncStorage:', error);
+    }
   };
 
-  const handleInstructionChange = (event) => {
-    setNewRecipe({ ...newRecipe, instructionInput: event.target.value });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setNewRecipe({ ...newRecipe, [name]: value });
   };
 
   const handleAddIngredient = () => {
@@ -67,38 +60,36 @@ function RecipeApp({ isAdmin }) {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        if (editMode.index !== null) {
-          setEditMode({ ...editMode, image: e.target.result });
-        } else {
-          setNewRecipe({ ...newRecipe, image: e.target.result });
-        }
+        setNewRecipe({ ...newRecipe, image: e.target.result });
       };
       reader.readAsDataURL(event.target.files[0]);
     }
   };
 
-  const handleEditClick = (index) => {
-    const recipe = recipes[index];
-    setEditMode({
-      index,
-      title: recipe.title,
-      ingredients: recipe.ingredients,
-      instructions: recipe.instructions,
-      image: recipe.image,
-    });
+  const handleRecipeDelete = (index) => {
+    const updatedRecipes = [...recipes];
+    updatedRecipes.splice(index, 1);
+    setRecipes(updatedRecipes);
+    saveRecipes(updatedRecipes);
   };
 
-  const handleSaveEdit = () => {
-    const updatedRecipe = { ...editMode }; 
-    dispatch(editRecipe(editMode.index, updatedRecipe));
-    setEditMode({ index: null, title: '', ingredients: [], instructions: [], image: '' }); 
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     dispatch(addRecipe(newRecipe)); 
-    setNewRecipe({ title: '', ingredients: [], instructions: [], image: '', ingredientInput: '', instructionInput: '' }); 
+    const updatedRecipes = [...recipes, newRecipe];
+    await saveRecipes(updatedRecipes); 
+    setRecipes(updatedRecipes); 
+    setNewRecipe({ title: '', ingredients: [], instructions: [], image: '', ingredientInput: '', instructionInput: '' });
   };
+
+  const [newRecipe, setNewRecipe] = useState({
+    title: '',
+    ingredients: [],
+    instructions: [],
+    image: '',
+    ingredientInput: '', 
+    instructionInput: '', 
+  });
 
   return (
     <div className="content">
@@ -119,7 +110,7 @@ function RecipeApp({ isAdmin }) {
             type="text"
             name="ingredientInput"
             value={newRecipe.ingredientInput} 
-            onChange={handleIngredientChange} 
+            onChange={(e) => setNewRecipe({ ...newRecipe, ingredientInput: e.target.value })} 
           />
           <button type="button" onClick={handleAddIngredient}>
             Add Ingredient
@@ -130,8 +121,23 @@ function RecipeApp({ isAdmin }) {
             ))}
           </ul>
         </label>
-        {/* Similar label for instructions */}
-
+        <label>
+          Instructions:
+          <input
+            type="text"
+            name="instructionInput"
+            value={newRecipe.instructionInput}
+            onChange={(e) => setNewRecipe({ ...newRecipe, instructionInput: e.target.value })}
+          />
+          <button type="button" onClick={handleAddInstruction}>
+            Add Instruction
+          </button>
+          <ol>
+            {newRecipe.instructions.map((instruction, index) => (
+              <li key={index}>{instruction}</li>
+            ))}
+          </ol>
+        </label>
         <label>
           Image:
           <input
@@ -139,24 +145,33 @@ function RecipeApp({ isAdmin }) {
             accept="image/*"
             onChange={handleImageChange}
           /> 
-          {/* Display the image if it exists */}
           {newRecipe.image && <img src={newRecipe.image} alt="Preview" />} 
         </label>
-
-        {isAdmin ? (
-          <input type="submit" value="Add Recipe" />
-        ) : (
-          <button disabled style={{ cursor: 'not-allowed' }}>
-            Add Recipe (Admin Only)
-          </button>
-        )}
+        <input type="submit" value="Add Recipe" />
       </form>
-
       <h2>Recipes</h2>
       <div>
         {recipes.map((recipe, index) => (
           <div key={index}>
-            {/* ... (editing logic and recipe display - same as before) */}
+            <h3>{recipe.title}</h3>
+            <p>Ingredients:</p>
+            <ul>
+              {recipe.ingredients.map((ingredient, i) => (
+                <li key={i}>{ingredient}</li>
+              ))}
+            </ul>
+            <p>Instructions:</p>
+            <ol>
+              {recipe.instructions.map((instruction, i) => (
+                <li key={i}>{instruction}</li>
+              ))}
+            </ol>
+            {recipe.image && (
+              <div>
+                <img src={recipe.image} alt="Recipe" style={{ maxWidth: '100px' }} />
+              </div>
+            )}
+                        <button onClick={() => handleRecipeDelete(index)}>Delete</button>
           </div>
         ))}
       </div>

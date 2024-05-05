@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
-function Login({ onLoginSuccess }) {
+function Login() {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // Get dispatch function
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,18 +10,14 @@ function Login({ onLoginSuccess }) {
   const handleLogin = (event) => {
     event.preventDefault();
 
-    // Get users from localStorage
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    // Find matching user
     const user = users.find(
       user => user.username === username && user.password === password
     );
 
-    // If user found, update Redux state and store user info
     if (user) {
-      // dispatch(loginAction(user)); // Assuming you have a login action in Redux
-      navigate('/'); // Redirect to home page (or any other page)
+      navigate('/admin');
     } else {
       setError('Invalid username or password');
     }

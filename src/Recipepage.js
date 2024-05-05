@@ -1,51 +1,65 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
-function RecipePage({ isAdmin }) {
-  const { id } = useParams();
-  const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
-  const index = parseInt(id, 10);
-  const recipe = recipes[index];
+function Recipepage({ recipeId }) {
+  const [recipe, setRecipe] = useState(null);
 
-  if (!recipe) {
-    return (
-      <div className="content">
-        <h2>Рецепт не найден</h2>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const loadRecipe = () => {
+      try {
+        const storedRecipes = localStorage.getItem('recipes');
+        if (storedRecipes) {
+          const recipes = JSON.parse(storedRecipes);
+          const selectedRecipe = recipes.find((r) => r.id === recipeId);
+          setRecipe(selectedRecipe);
+        }
+      } catch (error) {
+        console.error('Error loading recipe:', error);
+      }
+    };
+    loadRecipe();
+  }, [recipeId]);
 
   const handleDeleteRecipe = () => {
-    recipes.splice(index, 1);
-    localStorage.setItem('recipes', JSON.stringify(recipes));
-    window.location.href = '/recipeapp'; // Redirect to the recipe app page
+    try {
+      const storedRecipes = localStorage.getItem('recipes');
+      if (storedRecipes) {
+        let recipes = JSON.parse(storedRecipes);
+        recipes = recipes.filter((r) => r.id !== recipeId);
+        localStorage.setItem('recipes', JSON.stringify(recipes));
+        setRecipe(null);
+      }
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
+    }
   };
-
-  // Преобразуйте ingredients и instructions в массивы, разделив строки по запятым
-  const ingredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : recipe.ingredients.split(',');
-  const instructions = Array.isArray(recipe.instructions) ? recipe.instructions : recipe.instructions.split(',');
 
   return (
     <div className="content">
-      <h1>{recipe.title}</h1>
-      <img src={recipe.image} alt={recipe.title} /> {/* Display the image */}
-      <h2>Ингредиенты:</h2>
-      <ul>
-        {ingredients.map((ingredient, index) => (
-          <li key={index}>{ingredient}</li>
-        ))}
-      </ul>
-      <h2>Инструкции:</h2>
-      <ol>
-        {instructions.map((instruction, index) => (
-          <li key={index}>{instruction}</li>
-        ))}
-      </ol>
-      {isAdmin && (
-        <button onClick={handleDeleteRecipe}>Удалить рецепт</button>
+      {recipe ? (
+        <>
+          <h1>{recipe.title}</h1>
+          <img src={recipe.image} alt={recipe.title} />
+          <h2>Ингредиенты:</h2>
+          <ul>
+            {recipe.ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul>
+
+          <h2>Инструкции:</h2>
+          <ol>
+            {recipe.instructions.map((instruction, index) => (
+              <li key={index}>{instruction}</li>
+            ))}
+          </ol>
+
+          <button onClick={handleDeleteRecipe}>Удалить рецепт</button>
+        </>
+      ) : (
+        <p>Recipe not found</p>
       )}
     </div>
   );
 }
 
-export default RecipePage;
+export default Recipepage;

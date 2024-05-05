@@ -18,7 +18,7 @@ import Login from './Login';
 import RecipeApp from './RecipeApp';
 import RecipePage from './Recipepage';
 import AdminPage from './AdminPage';
-import HomePage from './HomePage'; // Import the new component for the home page
+import HomePage from './HomePage'; 
 
 const store = configureStore({
   reducer: rootReducer,
@@ -26,10 +26,6 @@ const store = configureStore({
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
-
-  const handleToggleAdmin = () => {
-    setIsAdmin(!isAdmin);
-  };
 
   const handleLogout = () => {
     setIsAdmin(false);
@@ -58,8 +54,8 @@ function App() {
             path="/login"
             element={<Login onLoginSuccess={handleLoginSuccess} />}
           />
-          <Route path="/recipeapp" element={<RecipeApp  isAdmin={isAdmin} />} />
-          <Route path="/recipe/:id" element={<RecipePage isAdmin={isAdmin}/>} />
+          <Route path="/recipeapp" element={<RecipeApp/>} />
+          <Route path="/recipe/:id" element={<RecipePage/>} />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
         <Footer />

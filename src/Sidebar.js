@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
 
 function Sidebar() {
   const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
+
   return (
-    <div>
-      <aside>
+    <div className="menubtn">
+      <button onClick={toggleSidebar}>
+        {isSidebarVisible ? 'Скрыть меню' : 'Показать меню'}
+      </button>
+      {isSidebarVisible && (
+        <aside>
         <p> Menu </p>
         <Link to="/page1">
           <i className="fa fa-user-o" aria-hidden="true"></i>
@@ -46,7 +56,8 @@ function Sidebar() {
           <i className="fa fa-laptop" aria-hidden="true"></i>
           Создай свой
         </Link>
-      </aside>
+        </aside>
+      )}
     </div>
   );
 }

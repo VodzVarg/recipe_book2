@@ -17,8 +17,10 @@ function Navbar(props) {
       <div className="header-container">
         <div className="header-content">
         <div class="header-left">
-            <span class="header-heart">♡</span>
-            <span class="header-title">1000 МЕНЮ</span>
+        <Link to="./">
+        <i className="fa fa-laptop" aria-hidden="true"></i>
+        ♡1000 МЕНЮ
+    </Link>
         </div>
         <div class="header-search">
             <input type="text" placeholder="Поиск" class="header-search-input" />
