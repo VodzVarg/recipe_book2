@@ -1,17 +1,28 @@
 ## Available Scripts
 
-Install Dependencies: React-scripts are missing, you can install it by running:
+To get started, make sure you have React-scripts installed:
 
-### ` npm install react-scripts --save`
+### `npm install react-scripts --save`
 
-Build Web Assets: Run 
+### Building Web Assets:
+
+To build your web assets, run:
 
 ### `npm run build`
 
-Sync to Android Project: In your terminal, use the Capacitor CLI to copy the updated web assets to the Android project:
+### Sync to Android Project:
+
+To sync the updated web assets to your Android project, use the Capacitor CLI:
 
 ### `npx cap sync android`
 
-Build in Android Studio: Switch to Android Studio. Since the web assets are now updated, you should only need to rebuild the Android project. You can often do this by clicking the "Run" button or using the build commands within Android Studio.
+### Building in Android Studio:
+
+Once the web assets are updated and synced, you can rebuild your Android project. You can do this in Android Studio:
+
+1. Click the "Run" button.
+2. Alternatively, use the build commands within Android Studio.
+
+If you prefer the command line, you can open your Android project directly from the terminal:
 
 ### `npx cap open android`
