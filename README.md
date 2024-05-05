@@ -1,5 +1,7 @@
 ## Available Scripts
 
+Before proceeding, ensure you have Node.js installed. If not, you can download and install it from [here](https://nodejs.org/).
+
 To get started, make sure you have React-scripts installed:
 
 ### `npm install react-scripts --save`
