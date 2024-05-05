@@ -153,4 +153,8 @@ body {
   .header-left {
     margin-left: 150px;
   }
+
+  aside {
+    z-index: 1;
+  }
 }
