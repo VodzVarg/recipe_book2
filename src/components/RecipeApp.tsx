@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { Recipe, RecipeState } from '../types';
 import RecipeList from './RecipeList';
 import { addRecipe, deleteRecipe } from '../actions/recipeActions'; 
+import Counter from './Counter';
 
 interface RecipeAppState extends RecipeState {
   recipes: Recipe[];
@@ -16,17 +17,29 @@ interface RecipeAppProps {
 }
 
 class RecipeApp extends Component<RecipeAppProps> {
-  state = {
-    recipes: this.props.recipes, // Initialize recipes from props
-    newRecipe: {
-      title: '',
-      ingredients: [],
-      instructions: [],
-      image: '',
-      ingredientInput: '',
-      instructionInput: '',
-    },
-  };
+  constructor(props: RecipeAppProps) {
+    super(props);
+    this.state = {
+      recipes: props.recipes, // Initialize recipes from props
+      newRecipe: {
+        title: '',
+        ingredients: [],
+        instructions: [],
+        image: '',
+        ingredientInput: '',
+        instructionInput: '',
+      },
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleAddIngredient = this.handleAddIngredient.bind(this);
+    this.handleAddInstruction = this.handleAddInstruction.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+
+
+
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -53,6 +66,8 @@ class RecipeApp extends Component<RecipeAppProps> {
     }
   };
 
+  
+
   handleAddInstruction = () => {
     const { instructionInput, instructions } = this.state.newRecipe;
     if (instructionInput.trim() !== '') {
@@ -66,6 +81,18 @@ class RecipeApp extends Component<RecipeAppProps> {
       }));
     }
   };
+
+  const dispatch = useDispatch();
+
+// Dispatch an action to add a new todo
+dispatch(addTodo(1, "Learn TypeScript"));
+
+// Dispatch an action to toggle a todo's completion status
+dispatch(toggleTodo(1));
+
+// Dispatch an action to delete a todo
+dispatch(deleteTodo(1));
+
 
   handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
