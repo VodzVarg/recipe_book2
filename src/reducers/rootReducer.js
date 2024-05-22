@@ -1,7 +1,13 @@
 import { combineReducers } from 'redux';
-import recipesReducer from './recipesReducer';
+import recipeReducer from './recipeReducer'; 
+import authReducer from './authReducer';
+import filterReducer from './filterReducer'; 
+
 const rootReducer = combineReducers({
-  recipes: recipesReducer,
+    recipes: recipeReducer, 
+    auth: authReducer, 
+    filters: filterReducer, 
+    // ... other reducers
 });
 
 export default rootReducer;

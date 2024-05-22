@@ -1,35 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+// Removed: import { useSelector, useDispatch } from 'react-redux';
+// Removed: import { handleDeleteRecipe, addRecipe } from './actions/actions';
 
-function Recipepage({ recipeId }) {
-  const [recipe, setRecipe] = useState(null);
+function RecipePage() {
+  const { id } = useParams();
+  const navigate = useNavigate(); 
+
+  const [recipe, setRecipe] = useState(null); // State for the selected recipe
 
   useEffect(() => {
-    const loadRecipe = () => {
+    const loadRecipesFromLocalStorage = () => {
       try {
         const storedRecipes = localStorage.getItem('recipes');
         if (storedRecipes) {
           const recipes = JSON.parse(storedRecipes);
-          const selectedRecipe = recipes.find((r) => r.id === recipeId);
-          setRecipe(selectedRecipe);
+          const foundRecipe = recipes.find(r => r.id === id);
+          if (foundRecipe) {
+            setRecipe(foundRecipe);
+          } 
         }
       } catch (error) {
-        console.error('Error loading recipe:', error);
+        console.error('Error loading recipes:', error);
       }
     };
-    loadRecipe();
-  }, [recipeId]);
 
-  const handleDeleteRecipe = () => {
-    try {
-      const storedRecipes = localStorage.getItem('recipes');
-      if (storedRecipes) {
-        let recipes = JSON.parse(storedRecipes);
-        recipes = recipes.filter((r) => r.id !== recipeId);
-        localStorage.setItem('recipes', JSON.stringify(recipes));
-        setRecipe(null);
-      }
-    } catch (error) {
-      console.error('Error deleting recipe:', error);
+    loadRecipesFromLocalStorage();
+  }, [id]); // Run whenever 'id' changes
+
+  const handleDelete = () => {
+    // Update localStorage directly
+    const storedRecipes = localStorage.getItem('recipes');
+    if (storedRecipes) {
+      const recipes = JSON.parse(storedRecipes).filter(r => r.id !== id);
+      localStorage.setItem('recipes', JSON.stringify(recipes));
+      setRecipe(null); // Clear the recipe state
+      navigate('/');
     }
   };
 
@@ -52,8 +58,10 @@ function Recipepage({ recipeId }) {
               <li key={index}>{instruction}</li>
             ))}
           </ol>
-
-          <button onClick={handleDeleteRecipe}>Удалить рецепт</button>
+          <button onClick={handleDelete}>Удалить рецепт</button>
+          <Link to="/">
+            <button>Вернуться</button>
+          </Link>
         </>
       ) : (
         <p>Recipe not found</p>
@@ -62,4 +70,4 @@ function Recipepage({ recipeId }) {
   );
 }
 
-export default Recipepage;
+export default RecipePage;

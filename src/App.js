@@ -3,7 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './reducers/rootReducer';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Page1 from './Page1';
+import Page1 from './Page1.tsx';
 import Page2 from './Page2';
 import Page3 from './Page3';
 import Page4 from './Page4';
